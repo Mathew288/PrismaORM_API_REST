@@ -14,8 +14,10 @@ router.get('/providers/:id', async (req,res)=>{
             id: parseInt(req.params.id)
         }
     });
-    if (!selectedProvider) 
+    if (!selectedProvider) {
         res.status(404).json({ error:"Provider not found"});
+        return;
+    }
     res.json(selectedProvider);
 });
 
