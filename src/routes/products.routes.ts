@@ -4,9 +4,13 @@ import { prisma } from "../db";
 const router = Router();
 
 
+/**
+ * ? ************************************************
+ * ?                GET PRODUCTS
+ * ? *************************************************
+ */
 router.get('/products', async (req, res) => {
-
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany({include:{provider:true}});
     res.json(products);
 });
 
@@ -18,13 +22,20 @@ router.get('/products/:id', async (req, res) => {
     });
 
     if (!products) {
-        res.json({ error:"Product not found"});
+        res.json({ error: "Product not found" });
         return;
     }
 
     res.send(products);
 });
 
+
+
+/**
+ * ? ************************************************
+ * ?                CREATE PRODUCTS
+ * ? *************************************************
+ */
 router.post('/products', async (req, res) => {
     const newProduct = await prisma.product.create({
         data: req.body
@@ -34,6 +45,11 @@ router.post('/products', async (req, res) => {
 })
 
 
+/**
+ * ? ************************************************
+ * ?                DELETE PRODUCTS
+ * ? *************************************************
+ */
 router.delete('/products/:id', async (req, res) => {
 
     const deletedProduct = await prisma.product.delete({
@@ -46,7 +62,13 @@ router.delete('/products/:id', async (req, res) => {
 
 
     return res.json(deletedProduct);
-})
+});
+
+/**
+ * ? ************************************************
+ * ?                UPDATE PRODUCTS
+ * ? *************************************************
+ */
 
 router.put('/products/:id', async (req, res) => {
     const updatedProduct = await prisma.product.update({
